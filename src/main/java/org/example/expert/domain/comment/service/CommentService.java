@@ -28,9 +28,11 @@ public class CommentService {
 
     @Transactional
     public CommentSaveResponse saveComment(AuthUser authUser, long todoId, CommentSaveRequest commentSaveRequest) {
-        User user = User.fromAuthUser(authUser);
+        // user 엔티티를 만들기 전 일정 존재 여부를 파악하여 Early Return
         Todo todo = todoRepository.findById(todoId).orElseThrow(() ->
                 new InvalidRequestException("Todo not found"));
+
+        User user = User.fromAuthUser(authUser);
 
         Comment newComment = new Comment(
                 commentSaveRequest.getContents(),
