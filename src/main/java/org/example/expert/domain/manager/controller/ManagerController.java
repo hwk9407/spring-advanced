@@ -25,25 +25,25 @@ public class ManagerController {
     @PostMapping("/todos/{todoId}/managers")
     public ResponseEntity<ManagerSaveResponse> saveManager(
             @Auth AuthUser authUser,
-            @PathVariable long todoId,
+            @PathVariable Long todoId,
             @Valid @RequestBody ManagerSaveRequest managerSaveRequest
     ) {
         return ResponseEntity.ok(managerService.saveManager(authUser, todoId, managerSaveRequest));
     }
 
     @GetMapping("/todos/{todoId}/managers")
-    public ResponseEntity<List<ManagerResponse>> getMembers(@PathVariable long todoId) {
-        return ResponseEntity.ok(managerService.getManagers(todoId));
+    public ResponseEntity<List<ManagerResponse>> findManagerList(@PathVariable Long todoId) {
+        return ResponseEntity.ok(managerService.findManagerList(todoId));
     }
 
     @DeleteMapping("/todos/{todoId}/managers/{managerId}")
     public void deleteManager(
             @RequestHeader("Authorization") String bearerToken,
-            @PathVariable long todoId,
-            @PathVariable long managerId
+            @PathVariable Long todoId,
+            @PathVariable Long managerId
     ) {
         Claims claims = jwtUtil.extractClaims(bearerToken.substring(7));
-        long userId = Long.parseLong(claims.getSubject());
+        Long userId = Long.parseLong(claims.getSubject());
         managerService.deleteManager(userId, todoId, managerId);
     }
 }

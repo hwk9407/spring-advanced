@@ -48,7 +48,7 @@ public class TodoService {
         );
     }
 
-    public Page<TodoResponse> getTodos(int page, int size) {
+    public Page<TodoResponse> retrieveAllTodos(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
 
         Page<Todo> todos = todoRepository.findAllByOrderByModifiedAtDesc(pageable);
@@ -64,7 +64,7 @@ public class TodoService {
         ));
     }
 
-    public TodoResponse getTodo(long todoId) {
+    public TodoResponse retrieveTodo(Long todoId) {
         Todo todo = todoRepository.findByIdWithUser(todoId)
                 .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
