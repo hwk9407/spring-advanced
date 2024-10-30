@@ -26,7 +26,6 @@ public class AuthService {
 
     @Transactional
     public SignupResponse signup(SignupRequest signupRequest) {
-        // 이메일 검증 로직 Early Return
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
             throw new InvalidRequestException("이미 존재하는 이메일입니다.");
         }
