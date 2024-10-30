@@ -41,7 +41,7 @@ class ManagerServiceTest {
 
     @Test
     @DisplayName(value = "manager 목록 조회 시 InvalidRequestException 에러를 던지는 예외 테스트")
-    public void findManagerList_ThrowIRE() {
+    public void findManagerListTest_ThrowIRE() {
         // given
         Long todoId = 1L;
         given(todoRepository.findById(todoId)).willReturn(Optional.empty());
@@ -52,11 +52,12 @@ class ManagerServiceTest {
     }
 
     @Test
-    void todo의_user가_null인_경우_예외가_발생한다() {
+    @DisplayName(value = "매니저 등록 시 todo의 user가 null인 경우 예외 테스트")
+    void saveManagerTest_ThrowException() {
         // given
         AuthUser authUser = new AuthUser(1L, "a@a.com", UserRole.USER);
-        long todoId = 1L;
-        long managerUserId = 2L;
+        Long todoId = 1L;
+        Long managerUserId = 2L;
 
         Todo todo = new Todo();
         ReflectionTestUtils.setField(todo, "user", null);
