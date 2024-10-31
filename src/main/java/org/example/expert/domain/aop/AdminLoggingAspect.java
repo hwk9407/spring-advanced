@@ -2,30 +2,24 @@ package org.example.expert.domain.aop;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.example.expert.config.CustomRequestWrapper;
 import org.example.expert.config.CustomResponseWrapper;
-import org.example.expert.config.JwtUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.io.BufferedReader;
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 
 @Component
 @Aspect
 @Slf4j
 public class AdminLoggingAspect {
 
-//    private final JwtUtil jwtUtil;
-//    private final HttpServletRequest request;
-//    private final HttpServletResponse response;
 
      /*
      <적용범위>
@@ -52,20 +46,10 @@ public class AdminLoggingAspect {
         HttpServletRequest request = attributes.getRequest();
         HttpServletResponse response = attributes.getResponse();
 
-        // CustomResponseWrapper로 응답 래핑
+        // CustomWrapper로 요청, 응답 래핑
         CustomResponseWrapper responseWrapper = new CustomResponseWrapper(response);
-
-
-        // 요청 본문 읽기
-        String requestBody = "";
-        StringBuilder requestBodyBuilder = new StringBuilder();
-        try (BufferedReader reader = request.getReader()) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                requestBodyBuilder.append(line);
-            }
-        }
-        requestBody = requestBodyBuilder.toString();
+        CustomRequestWrapper customRequestWrapper = new CustomRequestWrapper(request);
+        String requestBody = new String(customRequestWrapper.getInputStream().readAllBytes());
 
         // 요청 정보 로깅
         String requestURL = request.getRequestURI();
@@ -76,15 +60,16 @@ public class AdminLoggingAspect {
 
         try {
             Object output = joinPoint.proceed();
-            // 응답 본문 가져오기
             responseBody = responseWrapper.getResponseBody();
             return output;
         } finally {
+            Long userId = (Long) request.getAttribute("userId");
 
             // 로깅
+            log.info("Request ID: {}", userId);
             log.info("Request URL: {}", requestURL);
-            log.info("Request Body: {}", requestBody);
-            log.info("Response Body: {}", responseBody);
+            log.info("Request Body:\n{}", requestBody);
+            log.info("Response Body:\n{}", responseBody);
             log.info("RequestTime: {} ms", requestTime);
 
         }
