@@ -22,14 +22,14 @@ public class CommentController {
     @PostMapping("/todos/{todoId}/comments")
     public ResponseEntity<CommentSaveResponse> saveComment(
             @Auth AuthUser authUser,
-            @PathVariable long todoId,
+            @PathVariable Long todoId,
             @Valid @RequestBody CommentSaveRequest commentSaveRequest
     ) {
         return ResponseEntity.ok(commentService.saveComment(authUser, todoId, commentSaveRequest));
     }
 
     @GetMapping("/todos/{todoId}/comments")
-    public ResponseEntity<List<CommentResponse>> getComments(@PathVariable long todoId) {
-        return ResponseEntity.ok(commentService.getComments(todoId));
+    public ResponseEntity<List<CommentResponse>> retrieveAllComments(@PathVariable Long todoId) {
+        return ResponseEntity.ok(commentService.retrieveAllComments(todoId));
     }
 }

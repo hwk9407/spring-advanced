@@ -13,7 +13,7 @@ public class CommentAdminController {
     private final CommentAdminService commentAdminService;
 
     @DeleteMapping("/admin/comments/{commentId}")
-    public void deleteComment(@PathVariable long commentId) {
+    public void deleteComment(@PathVariable Long commentId) {
         commentAdminService.deleteComment(commentId);
     }
 }

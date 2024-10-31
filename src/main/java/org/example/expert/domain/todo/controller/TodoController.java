@@ -27,15 +27,15 @@ public class TodoController {
     }
 
     @GetMapping("/todos")
-    public ResponseEntity<Page<TodoResponse>> getTodos(
+    public ResponseEntity<Page<TodoResponse>> retrieveAllTodos(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        return ResponseEntity.ok(todoService.getTodos(page, size));
+        return ResponseEntity.ok(todoService.retrieveAllTodos(page, size));
     }
 
     @GetMapping("/todos/{todoId}")
-    public ResponseEntity<TodoResponse> getTodo(@PathVariable long todoId) {
-        return ResponseEntity.ok(todoService.getTodo(todoId));
+    public ResponseEntity<TodoResponse> retrieveTodo(@PathVariable Long todoId) {
+        return ResponseEntity.ok(todoService.retrieveTodo(todoId));
     }
 }
